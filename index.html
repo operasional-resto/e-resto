@@ -95,40 +95,6 @@
   </style>
 </head>
 <body class="bg-white text-slate-900 font-sans">
-  <!-- Role Login Overlay -->
-  <div id="roleLoginOverlay" class="fixed inset-0 bg-emerald-50/80 backdrop-blur-sm flex items-center justify-center z-[9999]">
-    <div class="bg-white border border-emerald-200 rounded-2xl shadow-xl max-w-md w-full mx-4 p-6 space-y-4">
-      <div class="flex items-center gap-3">
-        <div class="h-9 w-9 rounded-xl bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-600 font-semibold text-lg">
-          R
-        </div>
-        <div>
-          <h2 class="text-base sm:text-lg font-semibold tracking-tight">Resto Ops Hub</h2>
-          <p class="text-[11px] text-slate-600">Pilih peran Anda untuk mulai menggunakan aplikasi.</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 text-[11px]">
-        <button id="roleKaryawanBtn" class="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-left">
-          <div class="font-semibold text-xs">Karyawan</div>
-          <div class="text-[11px] text-slate-600">Akses fitur operasional harian sesuai outlet.</div>
-        </button>
-        <button id="roleHeadBtn" class="px-3 py-2 rounded-lg border border-amber-200 bg-amber-50 hover:bg-amber-100 text-left">
-          <div class="font-semibold text-xs text-amber-800">Kepala Cabang</div>
-          <div class="text-[11px] text-amber-800/80">Butuh password per outlet.</div>
-        </button>
-        <button id="roleAreaBtn" class="px-3 py-2 rounded-lg border border-sky-200 bg-sky-50 hover:bg-sky-100 text-left">
-          <div class="font-semibold text-xs text-sky-800">Area Manager</div>
-          <div class="text-[11px] text-sky-800/80">Akses beberapa outlet dalam wilayah.</div>
-        </button>
-        <button id="roleAdminBtn" class="px-3 py-2 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-left">
-          <div class="font-semibold text-xs text-emerald-800">Admin / Head Office</div>
-          <div class="text-[11px] text-emerald-800/80">Akses pengaturan global & laporan.</div>
-        </button>
-      </div>
-      <p class="text-[10px] text-slate-500 mt-1">Anda masih bisa mengganti peran dari header setelah masuk. Logout akan menampilkan halaman ini kembali.</p>
-    </div>
-  </div>
-
   <div class="min-h-screen flex flex-col">
     <!-- Header -->
     <header class="sticky top-0 z-40 bg-emerald-100/90 border-b border-emerald-200 backdrop-blur">
@@ -139,7 +105,7 @@
           </div>
           <div>
             <h1 class="text-lg sm:text-xl font-semibold tracking-tight">Resto Ops Hub</h1>
-
+            <p class="text-xs text-slate-500">Satu dashboard untuk semua outlet & aktivitas operasional</p>
           </div>
         </div>
 
@@ -161,9 +127,6 @@
             </span>
             <button id="headLoginBtn" class="px-3 py-1 rounded-lg border border-amber-500/60 text-amber-700 text-[11px] sm:text-xs font-medium hover:bg-amber-50 transition">
               Masuk Kepala Cabang
-            </button>
-            <button id="areaLoginBtn" class="px-3 py-1 rounded-lg border border-sky-500/60 text-sky-700 text-[11px] sm:text-xs font-medium hover:bg-sky-50 transition">
-              Masuk Area Manager
             </button>
             <button id="adminLoginBtn" class="px-3 py-1 rounded-lg border border-emerald-500/60 text-emerald-700 text-[11px] sm:text-xs font-medium hover:bg-emerald-50 transition">
               Masuk Admin
@@ -225,90 +188,12 @@
             <header class="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h2 class="text-lg sm:text-xl font-semibold tracking-tight">Dashboard Outlet</h2>
-
+                <p class="text-xs sm:text-sm text-slate-600">Ringkasan cepat aktivitas operasional untuk outlet terpilih.</p>
               </div>
               <div class="text-xs sm:text-sm text-slate-600">
                 Outlet aktif: <span id="dashOutletName" class="font-medium">-</span>
               </div>
             </header>
-
-            <!-- Dashboard Admin Global (hanya untuk Admin) -->
-            <div id="adminGlobalDashboard" class="hidden space-y-3">
-              <div class="bg-white border border-slate-200 rounded-2xl p-3.5 sm:p-4 shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-sm font-semibold">Ringkasan Semua Outlet (Admin)</h3>
-                  <span id="adminDashDateLabel" class="text-[11px] text-slate-600">-</span>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-[11px] sm:text-xs">
-                  <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    <div class="mb-1">Total Outlet</div>
-                    <div id="adminDashTotalOutlets" class="text-lg font-semibold">0</div>
-                  </div>
-                  <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    <div class="mb-1">Checklist Hari Ini</div>
-                    <div id="adminDashChecklist" class="text-lg font-semibold">0 / 0</div>
-                  </div>
-                  <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    <div class="mb-1">Preparation Hari Ini</div>
-                    <div id="adminDashPrep" class="text-lg font-semibold">0</div>
-                  </div>
-                  <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    <div class="mb-1">Tugas Hari Ini</div>
-                    <div id="adminDashTasks" class="text-lg font-semibold">0 (0 pending)</div>
-                  </div>
-                  <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    <div class="mb-1">Reject Hari Ini</div>
-                    <div id="adminDashReject" class="text-lg font-semibold">0</div>
-                  </div>
-                  <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                    <div class="mb-1">Feedback Negatif Hari Ini</div>
-                    <div id="adminDashFbNeg" class="text-lg font-semibold">0</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="bg-white border border-slate-200 rounded-2xl p-3.5 sm:p-4 shadow-sm overflow-hidden">
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-sm font-semibold">Ringkasan Per Outlet - Hari Ini</h3>
-                  <span id="adminOutletSummaryLabel" class="text-[11px] text-slate-600">- outlet</span>
-                </div>
-                <div class="overflow-auto max-h-[260px] text-[11px] sm:text-xs">
-                  <table class="min-w-full border-separate border-spacing-y-1">
-                    <thead class="text-[11px] uppercase text-slate-600">
-                      <tr>
-                        <th class="text-left px-2 py-1.5">Outlet</th>
-                        <th class="text-left px-2 py-1.5">Checklist (Selesai/Total)</th>
-                        <th class="text-left px-2 py-1.5">Prep</th>
-                        <th class="text-left px-2 py-1.5">Tugas Pending</th>
-                        <th class="text-left px-2 py-1.5">Reject Qty</th>
-                        <th class="text-left px-2 py-1.5">Feedback Negatif</th>
-                      </tr>
-                    </thead>
-                    <tbody id="adminOutletSummaryBody"></tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div class="bg-white border border-slate-200 rounded-2xl p-3.5 sm:p-4 shadow-sm overflow-hidden">
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-sm font-semibold">Tren 7 Hari (Semua Outlet)</h3>
-                  <span id="adminTrendRangeLabel" class="text-[11px] text-slate-600">-</span>
-                </div>
-                <div class="overflow-auto max-h-[260px] text-[11px] sm:text-xs">
-                  <table class="min-w-full border-separate border-spacing-y-1">
-                    <thead class="text-[11px] uppercase text-slate-600">
-                      <tr>
-                        <th class="text-left px-2 py-1.5">Tanggal</th>
-                        <th class="text-left px-2 py-1.5">Checklist (Selesai/Total)</th>
-                        <th class="text-left px-2 py-1.5">Reject Qty</th>
-                        <th class="text-left px-2 py-1.5">Feedback Negatif/Total</th>
-                      </tr>
-                    </thead>
-                    <tbody id="adminTrendBody"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
               <div class="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm flex flex-col gap-1.5">
@@ -1125,7 +1010,7 @@
           <!-- Log Book -->
           <section id="section-logbook" class="space-y-4 lg:space-y-5 hidden">
             <header class="space-y-1">
-              <h2 class="text-lg sm:text-xl font-semibold tracking-tight">Log Book</h2>
+              <h2 class="text-lg sm:text-xl font-semibold tracking-tight">Log Book (Catatan Antar Shift)</h2>
               <p class="text-xs sm:text-sm text-slate-600">Buku komunikasi untuk mencatat kejadian penting, tindakan, dan hal yang perlu diteruskan ke shift berikutnya.</p>
             </header>
 
@@ -1340,7 +1225,8 @@
     // maka akan menggunakan nilai default.
     const HEAD_PASSWORDS = {
       default: "2015115650MR", // ganti ini jika ingin password kepala cabang berbeda dari admin
-      "OUT-1": "mhtg",
+      // Contoh kustom per outlet:
+         "OUT-1": "mhtg",
       "OUT-2": "carolus",
       "OUT-3": "alsut",
       "OUT-4": "jec",
@@ -1694,11 +1580,11 @@
     };
 
     const INVENTORY_ITEM_TEMPLATES = [
-      "Ayam Negeri",
-      "Ayam Buncis",
-      "Ayam Kuning",
-      "Ayam Kuning Negeri",
-      "Ayam Marinade",
+      "AYAM NEGERI",
+      "AYAM BUNCIS",
+      "AYAM KUNING",
+      "AYAM KUNING" ,
+      "AYAM MARINADE",
       "BAWANG GORENG",
       "BIANG BUMBU OTAK-OTAK",
       "BIANG BUMBU SIOMAY",
@@ -1753,11 +1639,11 @@
     ];
 
     const INVENTORY_ITEM_DEFAULT_UNITS = {
-      "Ayam Negeri": "Kg",
-      "Ayam Buncis": "Kg",
-      "Ayam Kuning": "Pcs",
-      "Ayam Kuning Negeri": "Pcs",
-      "Ayam Marinade": "Kg",
+      "AYAM NEGERI": "Kg",
+      "AYAM BUNCIS": "Kg",
+      "AYAM KUNING": "Pcs",
+      "AYAM KUNING NEGERI": "Pcs",
+      "AYAM MARINADE": "Kg",
       "BAWANG GORENG": "Kg",
       "BIANG BUMBU OTAK-OTAK": "Kg",
       "BIANG BUMBU SIOMAY": "Kg",
@@ -1905,20 +1791,7 @@
     function renderOutletDropdown() {
       const select = document.getElementById("outletSelect");
       select.innerHTML = "";
-
-      let outlets = state.outlets.slice();
-
-      // Jika peran Area Manager, batasi outlet yang bisa dipilih sesuai wilayahnya
-      if (state.role === 'area' && state.areaRegion && AREA_MANAGER_REGIONS[state.areaRegion]) {
-        const allowed = new Set(AREA_MANAGER_REGIONS[state.areaRegion].outlets || []);
-        outlets = outlets.filter((o) => allowed.has(o.id));
-        // Jika outlet terpilih saat ini tidak termasuk, pindahkan ke outlet pertama yang diizinkan
-        if (!allowed.has(state.selectedOutletId) && outlets.length) {
-          state.selectedOutletId = outlets[0].id;
-        }
-      }
-
-      outlets.forEach((o) => {
+      state.outlets.forEach((o) => {
         const opt = document.createElement("option");
         opt.value = o.id;
         opt.textContent = o.name;
@@ -1935,27 +1808,21 @@
       const dot = document.getElementById("adminDot");
       const statusText = document.getElementById("adminStatusText");
       const headLoginBtn = document.getElementById("headLoginBtn");
-      const areaLoginBtn = document.getElementById("areaLoginBtn");
       const adminLoginBtn = document.getElementById("adminLoginBtn");
       const logoutBtn = document.getElementById("adminLogoutBtn");
       const outletNav = document.getElementById("outletSettingsNav");
       const checklistNav = document.getElementById("checklistSettingsNav");
-      const adminDash = document.getElementById('adminGlobalDashboard');
-      const roleOverlay = document.getElementById('roleLoginOverlay');
 
       const role = state.role || 'karyawan';
 
       // Warna indikator peran
-      dot.classList.remove("bg-red-500", "bg-amber-500", "bg-emerald-500", "bg-sky-500");
+      dot.classList.remove("bg-red-500", "bg-amber-500", "bg-emerald-500");
       if (role === 'admin') {
         dot.classList.add("bg-emerald-500");
         statusText.textContent = "Peran: Admin";
       } else if (role === 'kepala') {
         dot.classList.add("bg-amber-500");
         statusText.textContent = "Peran: Kepala Cabang";
-      } else if (role === 'area') {
-        dot.classList.add("bg-sky-500");
-        statusText.textContent = "Peran: Area Manager";
       } else {
         dot.classList.add("bg-red-500");
         statusText.textContent = "Peran: Karyawan";
@@ -1964,17 +1831,15 @@
       // Visibilitas tombol & menu admin
       if (role === 'admin') {
         if (headLoginBtn) headLoginBtn.classList.add("hidden");
-        if (areaLoginBtn) areaLoginBtn.classList.add("hidden");
         if (adminLoginBtn) adminLoginBtn.classList.add("hidden");
         logoutBtn.classList.remove("hidden");
         outletNav.classList.remove("hidden");
         if (checklistNav) checklistNav.classList.remove("hidden");
-      } else if (role === 'kepala' || role === 'area') {
+      } else if (role === 'kepala') {
         if (headLoginBtn) headLoginBtn.classList.add("hidden");
-        if (areaLoginBtn) areaLoginBtn.classList.add("hidden");
         if (adminLoginBtn) adminLoginBtn.classList.remove("hidden");
         logoutBtn.classList.remove("hidden");
-        // Kepala Cabang & Area Manager TIDAK boleh mengakses menu admin
+        // Kepala cabang TIDAK boleh mengakses menu admin
         outletNav.classList.add("hidden");
         if (checklistNav) checklistNav.classList.add("hidden");
         // Pastikan tidak sedang di halaman Pengaturan Outlet / Checklist jika bukan admin penuh
@@ -1984,7 +1849,6 @@
       } else {
         // Karyawan biasa
         if (headLoginBtn) headLoginBtn.classList.remove("hidden");
-        if (areaLoginBtn) areaLoginBtn.classList.remove("hidden");
         if (adminLoginBtn) adminLoginBtn.classList.remove("hidden");
         logoutBtn.classList.add("hidden");
         outletNav.classList.add("hidden");
@@ -1994,34 +1858,11 @@
         }
       }
 
-      // Tampilkan / sembunyikan overlay login role
-      if (roleOverlay) {
-        if (role === 'karyawan' && !state._roleConfirmedOnce) {
-          roleOverlay.classList.remove('hidden');
-        } else {
-          roleOverlay.classList.add('hidden');
-        }
-      }
-
       // Flag isAdmin dipertahankan untuk kompatibilitas lama (true hanya jika role admin)
       state.isAdmin = role === 'admin';
 
-      // Tampilkan / sembunyikan dashboard global admin
-      if (adminDash) {
-        if (role === 'admin') adminDash.classList.remove('hidden');
-        else adminDash.classList.add('hidden');
-      }
-
-      // Render ulang dropdown outlet jika role area agar pembatasan outlet berlaku
-      renderOutletDropdown();
-
       // Atur visibilitas elemen berdasarkan peran
       updateRoleVisibility();
-
-      // Render dashboard global jika sedang admin
-      if (role === 'admin') {
-        renderAdminDashboardGlobal();
-      }
     }
 
     function updateRoleVisibility() {
@@ -3544,120 +3385,6 @@
       if (todayLabel) todayLabel.textContent = new Date().toLocaleDateString("id-ID", { weekday: "long", day: "2-digit", month: "short", year: "numeric" });
     }
 
-    function renderAdminDashboardGlobal() {
-      const adminDashEl = document.getElementById('adminGlobalDashboard');
-      if (!adminDashEl || state.role !== 'admin') return;
-
-      const today = todayStr();
-      const dateLabel = document.getElementById('adminDashDateLabel');
-      if (dateLabel) {
-        dateLabel.textContent = new Date().toLocaleDateString("id-ID", { weekday: "long", day: "2-digit", month: "short", year: "numeric" });
-      }
-
-      let totalOutlets = state.outlets.length;
-      let checklistTotal = 0;
-      let checklistDone = 0;
-      let checklistNotOk = 0;
-      let prepToday = 0;
-      let tasksToday = 0;
-      let tasksPending = 0;
-      let rejectCount = 0;
-      let rejectQtyTotal = 0;
-      let feedbackToday = 0;
-      let feedbackNegativeToday = 0;
-
-      const perOutlet = [];
-
-      state.outlets.forEach((o) => {
-        const id = o.id;
-        ensureOutletContainers(id);
-
-        const cleanList = (state.cleaning[id] || []).filter((r) => r.date === today);
-        const prepList = (state.prep[id] || []).filter((r) => r.date === today);
-        const taskList = (state.tasks[id] || []).filter((r) => r.date === today);
-        const rejectList = (state.rejects[id] || []).filter((r) => r.date === today);
-        const fbList = (state.feedback[id] || []).filter((r) => r.date === today);
-
-        const cleanTotal = cleanList.length;
-        const cleanDone = cleanList.filter((r) => r.status === 'Selesai').length;
-        const cleanNotOk = cleanList.filter((r) => (r.result || '').toLowerCase() !== 'ok').length;
-
-        const prepCount = prepList.length;
-        const tasksCount = taskList.length;
-        const tasksPend = taskList.filter((r) => r.status !== 'Selesai').length;
-
-        const rejCount = rejectList.length;
-        let rejQty = 0;
-        rejectList.forEach((r) => {
-          const qn = Number(r.qty);
-          if (!isNaN(qn)) rejQty += qn;
-        });
-
-        const fbCount = fbList.length;
-        const fbNeg = fbList.filter((r) => Number(r.rating) <= 2).length;
-
-        checklistTotal += cleanTotal;
-        checklistDone += cleanDone;
-        checklistNotOk += cleanNotOk;
-        prepToday += prepCount;
-        tasksToday += tasksCount;
-        tasksPending += tasksPend;
-        rejectCount += rejCount;
-        rejectQtyTotal += rejQty;
-        feedbackToday += fbCount;
-        feedbackNegativeToday += fbNeg;
-
-        perOutlet.push({
-          outletId: id,
-          name: o.name,
-          cleanTotal,
-          cleanDone,
-          cleanNotOk,
-          prepCount,
-          tasksPend,
-          rejQty,
-          fbNeg,
-        });
-      });
-
-      const totalOutletsEl = document.getElementById('adminDashTotalOutlets');
-      const checklistEl = document.getElementById('adminDashChecklist');
-      const prepEl = document.getElementById('adminDashPrep');
-      const tasksEl = document.getElementById('adminDashTasks');
-      const rejectEl = document.getElementById('adminDashReject');
-      const fbNegEl = document.getElementById('adminDashFbNeg');
-
-      if (totalOutletsEl) totalOutletsEl.textContent = String(totalOutlets);
-      if (checklistEl) checklistEl.textContent = `${checklistDone} / ${checklistTotal}`;
-      if (prepEl) prepEl.textContent = String(prepToday);
-      if (tasksEl) tasksEl.textContent = `${tasksToday} (${tasksPending} pending)`;
-      if (rejectEl) rejectEl.textContent = String(rejectQtyTotal);
-      if (fbNegEl) fbNegEl.textContent = String(feedbackNegativeToday);
-
-      const body = document.getElementById('adminOutletSummaryBody');
-      const label = document.getElementById('adminOutletSummaryLabel');
-      if (body) {
-        body.innerHTML = '';
-        perOutlet.forEach((row) => {
-          if (!row.cleanTotal && !row.prepCount && !row.tasksPend && !row.rejQty && !row.fbNeg) return;
-          const tr = document.createElement('tr');
-          tr.className = 'bg-white hover:bg-slate-50';
-          tr.innerHTML = `
-            <td class="px-2 py-1.5 align-top text-xs">${row.name}</td>
-            <td class="px-2 py-1.5 align-top text-xs">${row.cleanDone} / ${row.cleanTotal}</td>
-            <td class="px-2 py-1.5 align-top text-xs">${row.prepCount}</td>
-            <td class="px-2 py-1.5 align-top text-xs">${row.tasksPend}</td>
-            <td class="px-2 py-1.5 align-top text-xs">${row.rejQty}</td>
-            <td class="px-2 py-1.5 align-top text-xs">${row.fbNeg}</td>
-          `;
-          body.appendChild(tr);
-        });
-      }
-      if (label) {
-        label.textContent = `${perOutlet.length} outlet`;
-      }
-    }
-
     function renderAllForCurrentOutlet() {
       refreshOutletLabels();
       renderInventory();
@@ -3671,56 +3398,16 @@
       renderLogbook();
       renderDashboard();
       renderChecklistTemplates();
-      if (state.role === 'admin') {
-        renderAdminDashboardGlobal();
-      }
     }
 
     function setupEventListeners() {
       const sidebar = document.getElementById("sidebar");
       const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
       const scheduleExportXlsBtn = document.getElementById("scheduleExportXlsBtn");
-      const roleOverlay = document.getElementById('roleLoginOverlay');
-      const roleKaryawanBtn = document.getElementById('roleKaryawanBtn');
-      const roleHeadBtn = document.getElementById('roleHeadBtn');
-      const roleAreaBtn = document.getElementById('roleAreaBtn');
-      const roleAdminBtn = document.getElementById('roleAdminBtn');
 
       if (scheduleExportXlsBtn) {
         scheduleExportXlsBtn.addEventListener("click", () => {
           exportScheduleToXls();
-        });
-      }
-
-      // Role login overlay handlers
-      if (roleKaryawanBtn && roleOverlay) {
-        roleKaryawanBtn.addEventListener('click', () => {
-          state.role = 'karyawan';
-          state.areaRegion = null;
-          state._roleConfirmedOnce = true;
-          saveState();
-          updateAdminUI();
-        });
-      }
-      if (roleHeadBtn && roleOverlay) {
-        roleHeadBtn.addEventListener('click', () => {
-          const headLoginBtn = document.getElementById('headLoginBtn');
-          if (headLoginBtn) headLoginBtn.click();
-          state._roleConfirmedOnce = true;
-        });
-      }
-      if (roleAreaBtn && roleOverlay) {
-        roleAreaBtn.addEventListener('click', () => {
-          const areaLoginBtn = document.getElementById('areaLoginBtn');
-          if (areaLoginBtn) areaLoginBtn.click();
-          state._roleConfirmedOnce = true;
-        });
-      }
-      if (roleAdminBtn && roleOverlay) {
-        roleAdminBtn.addEventListener('click', () => {
-          const adminLoginBtn = document.getElementById('adminLoginBtn');
-          if (adminLoginBtn) adminLoginBtn.click();
-          state._roleConfirmedOnce = true;
         });
       }
 
@@ -3752,18 +3439,7 @@
 
       const outletSelect = document.getElementById("outletSelect");
       outletSelect.addEventListener("change", (e) => {
-        const newId = e.target.value;
-        // Jika role Area Manager, pastikan outlet baru termasuk wilayahnya
-        if (state.role === 'area' && state.areaRegion && AREA_MANAGER_REGIONS[state.areaRegion]) {
-          const allowed = new Set(AREA_MANAGER_REGIONS[state.areaRegion].outlets || []);
-          if (!allowed.has(newId)) {
-            alert("Outlet ini di luar wilayah Area Manager yang sedang login.");
-            // Kembalikan pilihan ke outlet sebelumnya
-            renderOutletDropdown();
-            return;
-          }
-        }
-        state.selectedOutletId = newId;
+        state.selectedOutletId = e.target.value;
         ensureOutletContainers(state.selectedOutletId);
         saveState();
         renderAllForCurrentOutlet();
@@ -3785,7 +3461,6 @@
       }
 
       const headLoginBtn = document.getElementById("headLoginBtn");
-      const areaLoginBtn = document.getElementById("areaLoginBtn");
       const adminLoginBtn = document.getElementById("adminLoginBtn");
 
       if (headLoginBtn) {
@@ -3796,45 +3471,9 @@
           const expected = (HEAD_PASSWORDS && HEAD_PASSWORDS[outletId]) || (HEAD_PASSWORDS && HEAD_PASSWORDS.default) || ADMIN_PASSWORD;
           if (pwd === expected) {
             state.role = 'kepala';
-            state.areaRegion = null;
             saveState();
             updateAdminUI();
             alert("Login Kepala Cabang berhasil.");
-          } else {
-            alert("Password salah.");
-          }
-        });
-      }
-
-      if (areaLoginBtn) {
-        areaLoginBtn.addEventListener("click", () => {
-          const outletId = state.selectedOutletId;
-          if (!outletId) {
-            alert("Pilih outlet terlebih dahulu.");
-            return;
-          }
-          // Cari wilayah yang mencakup outlet ini
-          let regionKey = null;
-          let regionConfig = null;
-          for (const [key, cfg] of Object.entries(AREA_MANAGER_REGIONS)) {
-            if (cfg && Array.isArray(cfg.outlets) && cfg.outlets.includes(outletId)) {
-              regionKey = key;
-              regionConfig = cfg;
-              break;
-            }
-          }
-          if (!regionConfig) {
-            alert("Outlet ini belum di-assign ke Area Manager.");
-            return;
-          }
-          const pwd = prompt(`Masukkan password Area Manager untuk wilayah ${regionKey.toUpperCase()}:`);
-          if (pwd === null) return;
-          if (pwd === regionConfig.password) {
-            state.role = 'area';
-            state.areaRegion = regionKey;
-            saveState();
-            updateAdminUI();
-            alert("Login Area Manager berhasil.");
           } else {
             alert("Password salah.");
           }
@@ -3858,7 +3497,6 @@
       logoutBtn.addEventListener("click", () => {
         state.role = 'karyawan';
         state.isAdmin = false;
-        state.areaRegion = null;
         saveState();
         updateAdminUI();
       });
@@ -4951,4 +4589,3 @@
   </script>
 </body>
 </html>
-
