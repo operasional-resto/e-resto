@@ -38,7 +38,7 @@
 
         /* API Config - ISI URL WEB APP DI SINI */
         window.API_CONFIG = {
-          BASE_URL: 'https://script.google.com/macros/s/AKfycbwnazxoiJQh5SLCajLSVS_c6Gik4Lkucyy859GEX5lGb_Kw30_4q1EeL4U9IasCqMaD/exec?', // ← PASTE URL DEPLOYMENT CODE.GS + "?" untuk GET params
+          BASE_URL: 'https://script.google.com/macros/s/AKfycbxleNd39yl_dfWWXVbdo1rI4SxurTfrDgosFXbqpiZ8CnzpCZR3A1sHjSJ52GDTEy-E/exec?', // ← PASTE URL DEPLOYMENT CODE.GS + "?" untuk GET params
           TIMEOUT: 10000,
           OFFLINE_FALLBACK: true
         };
@@ -1559,7 +1559,7 @@
     <script>
         // FIXED: API_CONFIG now global in script scope
         window.API_CONFIG = {
-          BASE_URL: 'https://script.google.com/macros/s/AKfycbwnazxoiJQh5SLCajLSVS_c6Gik4Lkucyy859GEX5lGb_Kw30_4q1EeL4U9IasCqMaD/exec',
+          BASE_URL: 'https://script.google.com/macros/s/AKfycbxleNd39yl_dfWWXVbdo1rI4SxurTfrDgosFXbqpiZ8CnzpCZR3A1sHjSJ52GDTEy-E/exec',
           TIMEOUT: 10000,
           OFFLINE_FALLBACK: true
         };
@@ -1568,7 +1568,7 @@
         const api = {
           async fetchGet(endpoint, params = {}) {
             try {
-              if (!window.API_CONFIG.BASE_URL.includes('AKfycbwnazxoiJQh5SLCajLSVS_c6Gik4Lkucyy859GEX5lGb_Kw30_4q1EeL4U9IasCqMaD')) {
+              if (!window.API_CONFIG.BASE_URL.includes('AKfycbxleNd39yl_dfWWXVbdo1rI4SxurTfrDgosFXbqpiZ8CnzpCZR3A1sHjSJ52GDTEy-E')) {
                 const url = new URL(window.API_CONFIG.BASE_URL);
               url.searchParams.set('action', endpoint);
               if (params.outletId) url.searchParams.set('outletId', params.outletId);
@@ -4789,3 +4789,4 @@
     </script>
 </body>
 </html>
+
