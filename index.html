@@ -38,14 +38,22 @@
 
         /* API Config - ISI URL WEB APP DI SINI */
         window.API_CONFIG = {
-          BASE_URL: 'https://script.google.com/macros/s/AKfycbwnazxoiJQh5SLCajLSVS_c6Gik4Lkucyy859GEX5lGb_Kw30_4q1EeL4U9IasCqMaD/exec, // ← PASTE URL DEPLOYMENT CODE.GS
+          BASE_URL: 'https://script.google.com/macros/s/AKfycbwnazxoiJQh5SLCajLSVS_c6Gik4Lkucyy859GEX5lGb_Kw30_4q1EeL4U9IasCqMaD/exec?', // ← PASTE URL DEPLOYMENT CODE.GS + "?" untuk GET params
           TIMEOUT: 10000,
-          OFFLINE_FALLBACK: true  // Gunakan localStorage jika offline
+          OFFLINE_FALLBACK: true
         };
-
+        
         .sidebar-overlay.active {
             opacity: 1;
         }
+        
+        // Ensure API_CONFIG available before script runs
+        document.addEventListener('DOMContentLoaded', function() {
+          if (typeof API_CONFIG === 'undefined') {
+            console.warn('⚠️ API_CONFIG not found in <style>. Using offline mode.');
+          }
+        });
+
         
         @media (max-width: 768px) {
             .sidebar {
@@ -4773,3 +4781,5 @@
     </script>
 </body>
 </html>
+
+                    
