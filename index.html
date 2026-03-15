@@ -22,6 +22,8 @@
         .sentiment-positive { color: #10b981; }
         .sentiment-negative { color: #ef4444; }
         .sentiment-neutral { color: #6b7280; }
+        .api-loading { opacity: 0.6; pointer-events: none; }
+        .api-error { border: 2px solid #ef4444; background: #fef2f2; }
         
         /* Mobile Responsive Sidebar */
         .sidebar-overlay {
@@ -33,6 +35,14 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
+        /* API Config - ISI URL WEB APP DI SINI */
+        window.API_CONFIG = {
+          BASE_URL: 'https://script.google.com/macros/s/YOUR_WEB_APP_ID/exec', // ← PASTE URL DEPLOYMENT CODE.GS
+          TIMEOUT: 10000,
+          OFFLINE_FALLBACK: true  // Gunakan localStorage jika offline
+        };
+
         .sidebar-overlay.active {
             opacity: 1;
         }
@@ -1539,6 +1549,69 @@
     </div>
 
     <script>
+        // ============ API LAYER ============
+        const api = {
+          async fetchGet(endpoint, params = {}) {
+            try {
+              const url = new URL(API_CONFIG.BASE_URL);
+              url.searchParams.set('action', endpoint);
+              if (params.outletId) url.searchParams.set('outletId', params.outletId);
+              // Add other params as needed
+              
+              const response = await fetch(url, { 
+                method: 'GET', 
+                headers: { 'Content-Type': 'application/json' },
+                signal: AbortSignal.timeout(API_CONFIG.TIMEOUT)
+              });
+              
+              if (!response.ok) throw new Error(`HTTP ${response.status}`);
+              
+              const data = await response.json();
+              if (!data.success) throw new Error(data.error || 'API error');
+              
+              return data.data;
+            } catch (error) {
+              console.error('API GET error:', error);
+              if (API_CONFIG.OFFLINE_FALLBACK) {
+                showNotif('⚠️ Offline mode - menggunakan cache local', 'warning');
+                return null; // Fallback to local data
+              }
+              throw error;
+            }
+          },
+          
+          async fetchPost(action, data) {
+            try {
+              const response = await fetch(API_CONFIG.BASE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, ...data }),
+                signal: AbortSignal.timeout(API_CONFIG.TIMEOUT)
+              });
+              
+              if (!response.ok) throw new Error(`HTTP ${response.status}`);
+              
+              const result = await response.json();
+              if (!result.success) throw new Error(result.error || 'API error');
+              
+              return result.data;
+            } catch (error) {
+              console.error('API POST error:', error);
+              if (API_CONFIG.OFFLINE_FALLBACK) {
+                showNotif('⚠️ Data disimpan lokal (offline)', 'warning');
+                return { success: true, localSave: true };
+              }
+              throw error;
+            }
+          }
+        };
+
+        // Loading helper
+        function setLoading(elementId, loading = true) {
+          const el = document.getElementById(elementId);
+          if (el) el.classList.toggle('api-loading', loading);
+        }
+
         // ============ OUTLET DATA & ADMIN ============
         const ADMIN_PASSWORD = '2015115650MR';
         const EMPLOYEE_ADMIN_PASSWORD = '123MMPK';
@@ -1546,35 +1619,29 @@
         let isEmployeeAdminVerified = false;
         let currentOutletId = null;
         
-        const outletData = {
-            outlets: [
-                { id: 'OUT001', code: 'OUT001', name: 'Outlet Pusat - Jakarta', city: 'Jakarta', district: 'Distrik Jakarta', kacab: 'Budi Santoso', areaManager: 'Ahmad Wijaya', status: 'active', createdAt: '2024-01-01' },
-                { id: 'OUT002', code: 'OUT002', name: 'Outlet Bandung', city: 'Bandung', district: 'Distrik Jawa Barat', kacab: 'Ani Wijaya', areaManager: 'Dedi Pratama', status: 'active', createdAt: '2024-02-01' },
-                { id: 'OUT003', code: 'OUT003', name: 'Outlet Surabaya', city: 'Surabaya', district: 'Distrik Jawa Timur', kacab: 'Rudi Hartono', areaManager: 'Siti Rahayu', status: 'active', createdAt: '2024-03-01' },
-            ]
-        };
-        
-        // Load outlets from localStorage if exists
-        function loadOutlets() {
-            const saved = localStorage.getItem('restoflow_outlets');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (parsed && parsed.length > 0) {
-                        outletData.outlets = parsed;
-                    }
-                } catch(e) {
-                    console.log('Error parsing outlets:', e);
-                }
-            }
+        // API-powered outlets
+        let outletData = { outlets: [] };
+
+        // Load outlets from API (fallback localStorage)
+        async function loadOutlets() {
+          try {
+            setLoading('outletSelector', true);
+            outletData.outlets = await api.fetchGet('getOutlets') || [];
             
-            // Save default outlets if not saved yet
-            if (!saved && outletData.outlets.length > 0) {
-                saveOutletsToStorage();
+            // Fallback to local if empty
+            if (outletData.outlets.length === 0) {
+              const saved = localStorage.getItem('restoflow_outlets');
+              if (saved) outletData.outlets = JSON.parse(saved);
             }
-            
+          } catch (error) {
+            console.error('Load outlets failed:', error);
+            showNotif('⚠️ Gagal load outlets, menggunakan data lokal', 'warning');
+          } finally {
             renderOutletSelector();
+            setLoading('outletSelector', false);
+          }
         }
+
         
         // Save outlets to localStorage
         function saveOutletsToStorage() {
@@ -2632,21 +2699,28 @@
         
         // ============ EMPLOYEE ADMIN FUNCTIONS ============
         
-        // Admin check for employee management
-        function adminAddEmployee() {
+        // API-powered Employee Admin
+        async function adminAddEmployee() {
             if (isEmployeeAdminVerified) {
                 openEmployeeManageModal();
-            } else {
-                // Show password prompt
-                const password = prompt('🔒 Masukkan Password Admin Karyawan untuk mengelola data karyawan:');
-                if (password === EMPLOYEE_ADMIN_PASSWORD) {
+                return;
+            }
+            
+            const password = prompt('🔒 Password Admin Karyawan:');
+            if (!password) return;
+            
+            try {
+                const result = await api.fetchPost('verifyAdminPassword', { password, type: 'employee' });
+                if (result.verified) {
                     isEmployeeAdminVerified = true;
                     updateEmployeeButtonState();
                     openEmployeeManageModal();
                     showNotif('✅ Employee Admin access granted!');
-                } else if (password !== null) {
+                } else {
                     showNotif('❌ Password salah!', 'error');
                 }
+            } catch (error) {
+                showNotif('❌ Verifikasi gagal: ' + error.message, 'error');
             }
         }
         
